@@ -76,7 +76,9 @@ btnResetHistoryNode.addEventListener('click', resetHistory);
 function init() {
   expensesLimitNode.innerHTML = `${total} Руб.`;
   totalExpensesNode.innerText = '0 Руб.';
-  expensesStatusNode.innerText = STATUS_IN_LIMIT;
+  expensesStatusNode.innerText = `${STATUS_IN_LIMIT} (${
+    total - totalExpenses
+  } до лимита)`;
 }
 
 function validation() {
@@ -126,7 +128,9 @@ function outOfLimit() {
     } руб)`;
   } else {
     expensesStatusNode.classList.remove(STATUS_OUT_OF_LIMIT_CLASS);
-    expensesStatusNode.innerText = STATUS_IN_LIMIT;
+    expensesStatusNode.innerText = `${STATUS_IN_LIMIT} (${
+      total - totalExpenses
+    } до лимита)`;
   }
 }
 
