@@ -23,6 +23,8 @@ const btnResetHistoryNode = document.querySelector('.js-btn__reset');
 
 let expenses = [];
 let totalExpenses = 0;
+let expensesData = [];
+let expensesValue = 0;
 
 init();
 
@@ -32,25 +34,21 @@ inputNode.addEventListener('input', validation);
 popupInputNode.addEventListener('input', limitValidation);
 
 btnInputNode.addEventListener('click', function () {
-  // Берем сумму из инпута
   getValueFromUser();
-
-  // Отображаем сумму, проверяем если расходы больше лимита, калькулируем расхрды
   calcExpenses(expenses);
+  saveExpensesData(expensesData);
   outOfLimit();
   renderExpenses();
-
-  // Очищаем инпуты
-  inputNode.value = '';
-  totalExpenses = 0;
   validation();
+  inputNode.value = '';
 });
 
 popupBtnNode.addEventListener('click', function () {
   validation();
   getLimitFromUser();
-  updateLimit();
+  saveExpensesData(expensesData);
   outOfLimit();
+  updateLimit();
   closePopup();
 });
 
@@ -104,6 +102,7 @@ function limitValidation() {
 function getValueFromUser() {
   const expense = +inputNode.value;
   const category = expenseCategoryNode.value;
+  expensesData.push(expense);
 
   const expensesObj = {
     expenseSum: expense,
@@ -117,19 +116,24 @@ function calcExpenses(expenses) {
   expenses.forEach(item => {
     totalExpenses += item.expenseSum;
   });
+
   totalExpensesNode.innerHTML = `${totalExpenses} Руб.`;
 }
 
+function saveExpensesData(expenses) {
+  expensesValue = expenses.reduce((acc, item) => acc + item, 0);
+}
+
 function outOfLimit() {
-  if (totalExpenses > total) {
+  if (expensesValue > total) {
     expensesStatusNode.classList.add('expenses-status_bad');
     expensesStatusNode.innerText = `${STAUTS_OUT_OF_LIMIT} (-${
-      totalExpenses - total
+      expensesValue - total
     } руб)`;
   } else {
     expensesStatusNode.classList.remove(STATUS_OUT_OF_LIMIT_CLASS);
     expensesStatusNode.innerText = `${STATUS_IN_LIMIT} (${
-      total - totalExpenses
+      total - expensesValue
     } до лимита)`;
   }
 }
@@ -146,6 +150,7 @@ function renderExpenses() {
   });
 
   expensesContainerNode.innerHTML += valuesHTML;
+  totalExpenses = 0;
 }
 
 function openPopup() {
