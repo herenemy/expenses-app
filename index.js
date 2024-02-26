@@ -27,6 +27,7 @@ let expensesData = [];
 let expensesValue = 0;
 
 init();
+validation();
 
 // Event Listeners
 inputNode.addEventListener('input', validation);
@@ -39,8 +40,8 @@ btnInputNode.addEventListener('click', function () {
   saveExpensesData(expensesData);
   outOfLimit();
   renderExpenses();
-  validation();
   inputNode.value = '';
+  validation();
 });
 
 popupBtnNode.addEventListener('click', function () {
@@ -173,10 +174,12 @@ function updateLimit() {
 
 function resetHistory() {
   totalExpenses = 0;
+  expensesValue = 0;
   expensesContainerNode.innerHTML = '';
   expensesStatusNode.innerText = STATUS_IN_LIMIT;
   totalExpensesNode.innerText = '0 Руб.';
   inputNode.value = '';
   expenses = [];
+  expensesData = [];
   outOfLimit();
 }
